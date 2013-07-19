@@ -6,8 +6,8 @@ import br.ufrj.dcc.tp.flaviocdc.protocol.MAC
 class Switch {
 
     private ServerSocket serverSocket;
-    private List<Socket> ports = [];
-    private Map<MAC, Socket> forwardingTable = [:];
+    private List<Socket> ports = Collections.synchronizedList([]);
+    private Map<MAC, Socket> forwardingTable = Collections.synchronizedMap([:]);
 
     void on() {
         serverSocket = new ServerSocket(6000);
@@ -35,7 +35,7 @@ class Switch {
         }
     }
 
-    class HostHandler implements Runnable {
+    private class HostHandler implements Runnable {
         Socket hostSocket;
 
         @Override
@@ -94,16 +94,12 @@ class Switch {
             }
         }
 
-        void handleForwardingTable(Frame frame) {
+        private void handleForwardingTable(Frame frame) {
             Socket source = forwardingTable[frame.sourceMAC];
             if (source == null) {
                 switchPrint "adding ${frame.sourceMAC} to the forwarding table";
                 forwardingTable.put(frame.sourceMAC, hostSocket);
             }
-        }
-
-        void send(Frame frame) {
-
         }
     }
 

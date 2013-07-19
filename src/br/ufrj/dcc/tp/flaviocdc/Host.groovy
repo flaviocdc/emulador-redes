@@ -85,7 +85,7 @@ class Host {
         return 1;
     }
 
-    void worker() {
+    private void worker() {
         hostPrint "Starting thread for Host with ${mac} MAC"
 
         while (true) {
@@ -206,7 +206,7 @@ class Host {
         println "## HOST[${mac}]: ${str}";
     }
 
-    def sendToPhysicalLayer(Frame frame) {
+    private void sendToPhysicalLayer(Frame frame) {
         switchSocket.outputStream.write(frame.toByteArray());
         switchSocket.outputStream.flush();
     }
