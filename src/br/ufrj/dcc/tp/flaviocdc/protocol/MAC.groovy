@@ -40,4 +40,8 @@ class MAC {
 
         return other.toString().equals(this.toString());
     }
+
+    public int hashCode() {
+        return toString().hashCode();
+    }
 }

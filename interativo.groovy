@@ -5,7 +5,7 @@ import br.ufrj.dcc.tp.flaviocdc.protocol.IPPacket
 import br.ufrj.dcc.tp.flaviocdc.protocol.MAC
 import br.ufrj.dcc.tp.flaviocdc.protocol.Protocol
 
-Inet4Address localhost = (Inet4Address) InetAddress.getByName("192.168.1.109");
+Inet4Address localhost = (Inet4Address) InetAddress.getByName("146.164.250.175");
 
 Switch switchz = new Switch();
 switchz.on();

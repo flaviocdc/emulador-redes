@@ -63,7 +63,6 @@ class Switch {
                     it.outputStream.flush();
                 }
             } else {
-                println
                 destination.outputStream.write(frame.toByteArray());
                 destination.outputStream.flush();
             }

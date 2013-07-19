@@ -149,7 +149,7 @@ class Host {
                     data: responseARP.toByteArray()
             );
 
-            sendToPhysicalLayer(responseFrame.toByteArray());
+            sendToPhysicalLayer(responseFrame);
         }
 
         // algum ARP chegou como resposta a um broadcast que partiu desse host
@@ -182,7 +182,7 @@ class Host {
                     data: arp.toByteArray()
             );
 
-            sendToPhysicalLayer(arpFrame.toByteArray());
+            sendToPhysicalLayer(arpFrame);
 
             while (arpCache[ip] == null) {
                 hostPrint "waiting for arp reply...";
