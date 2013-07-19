@@ -14,6 +14,12 @@ class Switch {
         Thread.start("SwitchThread", this.&handleConnection);
     }
 
+    void off() {
+        ports.each{
+            it.close();
+        }
+    }
+
     void handleConnection() {
         while (true) {
             switchPrint "Waiting for host to connect...";
@@ -38,7 +44,13 @@ class Switch {
 
             while (true) {
                 byte[] buf = new byte[1500];
-                hostSocket.inputStream.read(buf);
+
+                try {
+                    int i = hostSocket.inputStream.read(buf);
+                    if (i < 0) break;
+                } catch (Exception e) {
+                    break;
+                }
 
                 Frame frame = Frame.fromByteArray(buf);
                 switchPrint "frame received ${frame}";
@@ -46,6 +58,20 @@ class Switch {
                 handleForwardingTable(frame);
                 forwardFrame(frame)
             }
+
+            switchPrint "${ports.indexOf(hostSocket)} disconnected, removing from forwarding table";
+
+            MAC toRemove = null;
+            forwardingTable.find { key, value ->
+                if (value.equals(hostSocket))
+                    toRemove = key;
+            }
+
+            if (toRemove != null) {
+                forwardingTable.remove(toRemove);
+                switchPrint "removed ${toRemove} from forwarding table";
+            }
+            ports.remove(hostSocket);
         }
 
         private void forwardFrame(Frame frame) {
@@ -74,6 +100,10 @@ class Switch {
                 switchPrint "adding ${frame.sourceMAC} to the forwarding table";
                 forwardingTable.put(frame.sourceMAC, hostSocket);
             }
+        }
+
+        void send(Frame frame) {
+
         }
     }
 

@@ -76,7 +76,6 @@ class Host {
 
     int N_Deactivate_Request() {
         try {
-            switchSocket.disconnect();
             switchSocket.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,7 +90,14 @@ class Host {
 
         while (true) {
             byte[] data = new byte[1500];
-            switchSocket.inputStream.read(data);
+
+            try {
+                int i = switchSocket.inputStream.read(data);
+                if (i < 0) break;
+            } catch (Exception e) {
+                hostPrint "I/O error => ${e.message}";
+                break;
+            }
 
             Frame frame = Frame.fromByteArray(data);
             hostPrint "Frame received: ${frame}";

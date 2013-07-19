@@ -19,3 +19,5 @@ host2.N_Activate_Request(localhost, InetAddress.getByName("10.0.0.2"), localhost
 
 host1.N_Data_Request(Protocol.TRANSPORT_TCP, host2.localIP, [0xCA, 0xFE, 0xBA, 0xBE] as byte[]);
 host2.N_Data_Request(Protocol.TRANSPORT_TCP, host1.localIP, [0xCA, 0xFE, 0xBA, 0xBE] as byte[]);
+
+host2.N_Deactivate_Request();
