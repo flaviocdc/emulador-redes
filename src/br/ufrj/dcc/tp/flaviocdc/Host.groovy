@@ -53,8 +53,7 @@ class Host {
         assert frame.data.length <= 1500;
 
         try {
-            switchSocket.outputStream.write(frame.toByteArray());
-            switchSocket.outputStream.flush();
+            sendToPhysicalLayer(frame);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -150,10 +149,7 @@ class Host {
                     data: responseARP.toByteArray()
             );
 
-            switchSocket.outputStream.write(responseFrame.toByteArray());
-            switchSocket.outputStream.flush();
-
-            return;
+            sendToPhysicalLayer(responseFrame.toByteArray());
         }
 
         // algum ARP chegou como resposta a um broadcast que partiu desse host
@@ -186,8 +182,7 @@ class Host {
                     data: arp.toByteArray()
             );
 
-            switchSocket.outputStream.write(arpFrame.toByteArray());
-            switchSocket.outputStream.flush();
+            sendToPhysicalLayer(arpFrame.toByteArray());
 
             while (arpCache[ip] == null) {
                 hostPrint "waiting for arp reply...";
@@ -203,5 +198,10 @@ class Host {
 
     def hostPrint(String str) {
         println "## HOST[${mac}]: ${str}";
+    }
+
+    def sendToPhysicalLayer(Frame frame) {
+        switchSocket.outputStream.write(frame.toByteArray());
+        switchSocket.outputStream.flush();
     }
 }
